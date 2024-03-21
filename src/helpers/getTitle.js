@@ -29,82 +29,67 @@ export default async function getTitle(id) {
       : [];
   };
 
-  return {
-    id: id,
-    review_api_path: `/reviews/${id}`,
-    imdb: `https://www.imdb.com/title/${id}`,
-    contentType: props.aboveTheFoldData.titleType.id,
-    contentRating: props.aboveTheFoldData?.certificate?.rating ?? "N/A",
-    isSeries: props.aboveTheFoldData.titleType.isSeries,
-    productionStatus:
-      props.aboveTheFoldData.productionStatus.currentProductionStage.id,
-    isReleased:
-      props.aboveTheFoldData.productionStatus.currentProductionStage.id ===
+  const resultArray = [
+    id,
+    `/reviews/${id}`,
+    `https://www.imdb.com/title/${id}`,
+    props.aboveTheFoldData.titleType.id,
+    props.aboveTheFoldData?.certificate?.rating ?? "N/A",
+    props.aboveTheFoldData.titleType.isSeries,
+    props.aboveTheFoldData.productionStatus.currentProductionStage.id,
+    props.aboveTheFoldData.productionStatus.currentProductionStage.id ===
       "released",
-    title: props.aboveTheFoldData.titleText.text,
-    image: props.aboveTheFoldData.primaryImage.url,
-    images: props.mainColumnData.titleMainImages.edges
+    props.aboveTheFoldData.titleText.text,
+    props.aboveTheFoldData.primaryImage.url,
+    props.mainColumnData.titleMainImages.edges
       .filter((e) => e.__typename === "ImageEdge")
       .map((e) => e.node.url),
-    plot: props.aboveTheFoldData.plot.plotText.plainText,
-    runtime:
-      props.aboveTheFoldData.runtime?.displayableProperty?.value?.plainText ??
-      "",
-    runtimeSeconds: props.aboveTheFoldData.runtime?.seconds ?? 0,
-    rating: {
-      count: props.aboveTheFoldData.ratingsSummary?.voteCount ?? 0,
-      star: props.aboveTheFoldData.ratingsSummary?.aggregateRating ?? 0,
-    },
-    award: {
-      wins: props.mainColumnData.wins?.total ?? 0,
-      nominations: props.mainColumnData.nominations?.total ?? 0,
-    },
-    genre: props.aboveTheFoldData.genres.genres.map((e) => e.id),
-    releaseDetailed: {
-      date: new Date(
-        props.aboveTheFoldData.releaseDate.year,
-        props.aboveTheFoldData.releaseDate.month - 1,
-        props.aboveTheFoldData.releaseDate.day
-      ).toISOString(),
-      day: props.aboveTheFoldData.releaseDate.day,
-      month: props.aboveTheFoldData.releaseDate.month,
-      year: props.aboveTheFoldData.releaseDate.year,
-      releaseLocation: {
-        country: props.mainColumnData.releaseDate?.country?.text,
-        cca2: props.mainColumnData.releaseDate?.country?.id,
-      },
-      originLocations: props.mainColumnData.countriesOfOrigin.countries.map(
-        (e) => ({
-          country: e.text,
-          cca2: e.id,
-        })
-      ),
-    },
-    year: props.aboveTheFoldData.releaseDate.year,
-    spokenLanguages: props.mainColumnData.spokenLanguages.spokenLanguages.map(
-      (e) => ({
-        language: e.text,
-        id: e.id,
-      })
-    ),
-    filmingLocations: props.mainColumnData.filmingLocations.edges.map(
-      (e) => e.node.text
-    ),
-    actors: getCredits("cast"),
-    actors_v2: getCredits("cast", "2"),
-    creators: getCredits("creator"),
-    creators_v2: getCredits("creator", "2"),
-    directors: getCredits("director"),
-    directors_v2: getCredits("director", "2"),
-    writers: getCredits("writer"),
-    writers_v2: getCredits("writer", "2"),
-    top_credits: props.aboveTheFoldData.principalCredits.map((e) => ({
+    props.aboveTheFoldData.plot.plotText.plainText,
+    props.aboveTheFoldData.runtime?.displayableProperty?.value?.plainText ?? "",
+    props.aboveTheFoldData.runtime?.seconds ?? 0,
+    props.aboveTheFoldData.ratingsSummary?.voteCount ?? 0,
+    props.aboveTheFoldData.ratingsSummary?.aggregateRating ?? 0,
+    props.mainColumnData.wins?.total ?? 0,
+    props.mainColumnData.nominations?.total ?? 0,
+    props.aboveTheFoldData.genres.genres.map((e) => e.id),
+    new Date(
+      props.aboveTheFoldData.releaseDate.year,
+      props.aboveTheFoldData.releaseDate.month - 1,
+      props.aboveTheFoldData.releaseDate.day
+    ).toISOString(),
+    props.aboveTheFoldData.releaseDate.day,
+    props.aboveTheFoldData.releaseDate.month,
+    props.aboveTheFoldData.releaseDate.year,
+    props.mainColumnData.releaseDate?.country?.text,
+    props.mainColumnData.releaseDate?.country?.id,
+    props.mainColumnData.countriesOfOrigin.countries.map((e) => ({
+      country: e.text,
+      cca2: e.id,
+    })),
+    props.mainColumnData.spokenLanguages.spokenLanguages.map((e) => ({
+      language: e.text,
+      id: e.id,
+    })),
+    props.mainColumnData.filmingLocations.edges.map((e) => e.node.text),
+    getCredits("cast"),
+    getCredits("cast", "2"),
+    getCredits("creator"),
+    getCredits("creator", "2"),
+    getCredits("director"),
+    getCredits("director", "2"),
+    getCredits("writer"),
+    getCredits("writer", "2"),
+    props.aboveTheFoldData.principalCredits.map((e) => ({
       id: e.category.id,
       name: e.category.text,
       credits: e.credits.map((e) => e.name.nameText.text),
     })),
-    ...(props.aboveTheFoldData.titleType.isSeries
-      ? await seriesFetcher(id)
-      : {}),
-  };
+  ];
+
+  if (props.aboveTheFoldData.titleType.isSeries) {
+    const seriesData = await seriesFetcher(id);
+    resultArray.push(seriesData);
+  }
+
+  return resultArray;
 }
