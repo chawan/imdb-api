@@ -90,7 +90,7 @@ export default async function getTitle(id) {
     actors_v2: getCredits("cast", "2"),
     creators: getCredits("creator"),
     creators_v2: getCredits("creator", "2"),
-    directors: getCredits("director"),
+    directors: props.aboveTheFoldData.principalCredits.find((e) => e.category.id === "director")?.credits[0]?.name.nameText.text ?? "",
     directors_v2: getCredits("director", "2"),
     writers: getCredits("writer"),
     writers_v2: getCredits("writer", "2"),
