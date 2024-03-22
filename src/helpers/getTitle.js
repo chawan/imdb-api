@@ -82,7 +82,7 @@ export default async function getTitle(id) {
     },
     year: props.aboveTheFoldData.releaseDate.year,
     spokenLanguages: props.mainColumnData.spokenLanguages.spokenLanguages.map(
-      (e) => (e.text).join(', '),
+      (e) => e.text).join(', '),
     filmingLocations: props.mainColumnData.filmingLocations.edges.map(
       (e) => e.node.text
     ),
