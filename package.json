@@ -2,7 +2,7 @@
   "private": true,
   "name": "imdb-api",
   "version": "1.0.3",
-  "description": "Serverless IMDB API powered by Cloudflare Worker",
+  "description": "Serverless IMDB API powered by Cloudflare Worker. Forked",
   "main": "src/index.js",
   "scripts": {
     "dev": "wrangler dev src/index.js --port 3000",
