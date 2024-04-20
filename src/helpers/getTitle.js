@@ -73,16 +73,16 @@ export default async function getTitle(id) {
         country: props.mainColumnData.releaseDate?.country?.text,
         cca2: props.mainColumnData.releaseDate?.country?.id,
       },
-      originLocations: props.mainColumnData.countriesOfOrigin.countries.map(
+      originLocations: props.mainColumnData.countriesOfOrigin?.countries.map(
         (e) => ({
           country: e.text,
           cca2: e.id,
         })
-      ),
+      ) ?? null,
     },
     year: props.aboveTheFoldData.releaseDate.year,
-    spokenLanguages: props.mainColumnData.spokenLanguages.spokenLanguages.map(
-      (e) => e.text).join(', '),
+    spokenLanguages: props.mainColumnData.spokenLanguages?.spokenLanguages.map(
+      (e) => e.text).join(', ') ?? null,
     filmingLocations: props.mainColumnData.filmingLocations.edges.map(
       (e) => e.node.text
     ),
