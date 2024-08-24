@@ -42,7 +42,7 @@ export default async function getTitle(id) {
       props.aboveTheFoldData.productionStatus.currentProductionStage.id ===
       "released",
     title: props.aboveTheFoldData.titleText.text,
-    image: props.aboveTheFoldData.primaryImage.url,
+    image: props.aboveTheFoldData?.primaryImage?.url ?? null,
     images: props.mainColumnData.titleMainImages.edges
       .filter((e) => e.__typename === "ImageEdge")
       .map((e) => e.node.url),
@@ -61,14 +61,14 @@ export default async function getTitle(id) {
     },
     genre: props.aboveTheFoldData.genres.genres.map((e) => e.id).join(', '), // Modify this line
     releaseDetailed: {
-      date: new Date(
+      date: (props.aboveTheFoldData.releaseDate == null) ? null : new Date(
         props.aboveTheFoldData.releaseDate.year,
         props.aboveTheFoldData.releaseDate.month - 1,
         props.aboveTheFoldData.releaseDate.day
       ).toISOString(),
-      day: props.aboveTheFoldData.releaseDate.day,
-      month: props.aboveTheFoldData.releaseDate.month,
-      year: props.aboveTheFoldData.releaseDate.year,
+      day: props.aboveTheFoldData?.releaseDate?.day ?? null,
+      month: props.aboveTheFoldData?.releaseDate?.month ?? null,
+      year: props.aboveTheFoldData?.releaseDate?.year ?? null,
       releaseLocation: {
         country: props.mainColumnData.releaseDate?.country?.text,
         cca2: props.mainColumnData.releaseDate?.country?.id,
@@ -80,7 +80,7 @@ export default async function getTitle(id) {
         })
       ) ?? null,
     },
-    year: props.aboveTheFoldData.releaseDate.year,
+    year: props.aboveTheFoldData?.releaseDate?.year ?? null,
     spokenLanguages: props.mainColumnData.spokenLanguages?.spokenLanguages.map(
       (e) => e.text).join(', ') ?? null,
     filmingLocations: props.mainColumnData.filmingLocations.edges.map(
