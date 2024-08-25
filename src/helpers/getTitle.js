@@ -30,9 +30,10 @@ export default async function getTitle(id) {
   };
 
   return {
-    id: id,
-    review_api_path: `/reviews/${id}`,
-    imdb: `https://www.imdb.com/title/${id}`,
+    id: props.aboveTheFoldData.id,
+    idHasChanged: (props.aboveTheFoldData.id !== id),
+    review_api_path: `/reviews/${props.aboveTheFoldData.id}`,
+    imdb: `https://www.imdb.com/title/${props.aboveTheFoldData.id}`,
     contentType: props.aboveTheFoldData.titleType.id,
     contentRating: props.aboveTheFoldData?.certificate?.rating ?? "N/A",
     isSeries: props.aboveTheFoldData.titleType.isSeries,
