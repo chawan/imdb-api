@@ -81,7 +81,7 @@ export default async function getTitle(id) {
         })
       ) ?? null,
     },
-    year: (props.aboveTheFoldData.releaseDate == null) ? props.aboveTheFoldData.releaseYear.year : props.aboveTheFoldData.releaseDate.year,
+    year: (props.aboveTheFoldData.releaseDate == null) ? props.aboveTheFoldData.releaseYear?.year ?? null : props.aboveTheFoldData.releaseDate?.year ?? null,
     spokenLanguages: props.mainColumnData.spokenLanguages?.spokenLanguages.map(
       (e) => e.text).join(', ') ?? null,
     filmingLocations: props.mainColumnData.filmingLocations.edges.map(
